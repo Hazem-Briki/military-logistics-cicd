@@ -5,7 +5,7 @@ from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
 from src.database.connection import create_database_engine
-from src.extract.checkpoint import read_checkpoint, write_checkpoint
+from src.extract.checkpoint import read_checkpoint
 
 
 logger = logging.getLogger(__name__)
@@ -85,15 +85,6 @@ def extract_purchase_orders():
         if row_count == 0:
             logger.info("No new or updated purchase orders found.")
             return purchase_orders
-
-        latest_updated_at = purchase_orders["updated_at"].max()
-
-        write_checkpoint(str(latest_updated_at))
-
-        logger.info(
-            "Checkpoint updated to: %s",
-            latest_updated_at,
-        )
 
         return purchase_orders
 
